@@ -1,6 +1,8 @@
 #include <iostream>
 #include <cstring>
 #include <iomanip>
+#include <conio.h>
+#include <windows.h>
 
 #define WIDTH 6
 
@@ -14,7 +16,7 @@ class student
 	private:
 		int num;        //准考证号 
 		string name;    //姓名 
-		string sex;       //性别 
+		string sex;     //性别 
 		int age;        //年龄 
 		string job;     //职业
 		student *next;  //链接到下一条信息 
@@ -22,6 +24,7 @@ class student
 		void get();     //获取信息 
 		void print();   //打印信息 
 		student();
+		student &operator=(const student &);
 		~student(){}
 };
 
@@ -32,6 +35,8 @@ class sys
 		student *head;
 		student *tail;
 		int n;
+		HANDLE hOut;
+		CONSOLE_SCREEN_BUFFER_INFO bInfo;
 	public:
 		void build();                      //建立 
 		void run();                        //运行 
@@ -39,10 +44,11 @@ class sys
 		void ins(int pos,student *p);      //插入 
 		void del(int nu);                  //删除 
 		student * find(int nu);            //查找 
-		void mod(int nu);       //修改 
+		void mod(int nu,student *p);       //修改 
 		void sta();                        //统计 
-		void show();                       //显示全部数据
+		void show(int nu);                 //显示全部数据
 		void title(); 		               //显示标题 
+		void initial();                    //初始化 
 		sys();
 		~sys();
 };
@@ -52,6 +58,9 @@ int main()
 	
 	//首先建立考试系统 
 	sys exam;
+	
+	//初始化考试系统
+	exam.initial(); 
 	
 	//运行考试系统	
 	exam.run();
@@ -73,6 +82,16 @@ void student::get()
 {
 	cin>>num>>name>>sex>>age>>job;
 }
+
+//赋值函数重载
+student &student::operator=(const student &p)
+{
+	num=p.num;
+	name=p.name;
+	sex=p.sex;
+	age=p.age;
+	job=p.job;
+} 
 
 //打印学生信息 
 void student::print()
@@ -100,9 +119,8 @@ void sys::title()
 }
 
 //显示
-void sys::show()
+void sys::show(int nu)
 {
-	
 	
 	student *p=head;
 	
@@ -110,7 +128,17 @@ void sys::show()
 		
 	while (p)
 	{
-		p->print();
+		if (p->num==nu)
+		{
+			SetConsoleTextAttribute(hOut,FOREGROUND_RED|FOREGROUND_INTENSITY);
+			p->print();
+			SetConsoleTextAttribute(hOut,bInfo.wAttributes);
+		}
+		else
+		{
+			p->print();
+		}
+		
 		p=p->next;
 	}
 	
@@ -185,15 +213,10 @@ void sys::del(int nu)
 }
 
 //修改 
-void sys::mod(int nu)
+void sys::mod(int nu,student *pp)
 {
-	student *p;
 	
-	p=find(nu);
-	
-	cout<<endl<<"请输入修改后该考生的考号，姓名，性别，年龄及报考类型!"<<endl;
-	
-	p->get();
+	*find(nu)=*pp;
 	
 }
 
@@ -222,8 +245,18 @@ void sys::build()
 	
 	cout<<endl;
 	
-	show();
+	show(-1);
 	
+}
+
+//初始化 
+void sys::initial()
+{
+	hOut=GetStdHandle(STD_OUTPUT_HANDLE);
+	
+	GetConsoleScreenBufferInfo(hOut,&bInfo);
+	
+	SetConsoleTitle("考试报名系统");
 }
 
 void sys::run()
@@ -261,7 +294,7 @@ void sys::run()
 					p->get();
 					ins(pos,p);
 					
-					show();
+					show(p->num);
 					break;
 				}
 			case 2:
@@ -271,7 +304,7 @@ void sys::run()
 					cin>>nu;
 					del(nu);
 					
-					show();
+					show(-1);
 					break;
 				}
 			case 3:
@@ -280,20 +313,34 @@ void sys::run()
 					cout<<"请输入您要查找的考生的考号：";
 					cin>>nu;
 					title();
+					
+					SetConsoleTextAttribute(hOut,FOREGROUND_RED|FOREGROUND_INTENSITY);
 					find(nu)->print();
+					SetConsoleTextAttribute(hOut,bInfo.wAttributes);
+					
+					
 					cout<<endl;
 					break;
 				}
 			case 4:
 				{
 					int nu;
+					student *p;
+					
+					p=new student();
 					
 					cout<<"请输入您要修改的考生的考号：";
 					cin>>nu;
 					
-					mod(nu);
+					cout<<endl<<"请输入修改后该考生的考号，姓名，性别，年龄及报考类型!"<<endl;
+					p->get();
 					
-					show();
+					mod(nu,p);
+					
+					show(p->num);
+					
+					delete p;
+					
 					break;
 				}
 			case 5:
@@ -315,6 +362,8 @@ void sys::run()
 void sys::stop()
 {
 	
+	
+	CloseHandle(hOut);
 }
 
 sys::sys()
