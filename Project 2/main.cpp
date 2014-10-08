@@ -50,14 +50,14 @@ void game::Initial()
     cin>>m;
     cin>>k;
 
-    head=new person(n);
+    head=new person(1);
     tail=head;
 
-    for (int i=n-1;i>0;i--)
+    for (int i=2;i<=n;i++)
     {
         p=new person(i);
-        p->next=head;
-        head=p;
+        tail->next=p;
+        tail=p;
     }
 
     tail->next=head;
@@ -66,8 +66,47 @@ void game::Initial()
 
 void game::start()
 {
+  
+    int i,j;
+    person *p=head;
+    s--;
+    if (s==0)
+        s=n;
     
+   while (p->num!=s)
+       p=p->next;
 
+    for (i=0;i<n-k;i++)
+    {
+        for (j=0;j<m;j++)
+            p=p->next;
+        
+        cout<<p->num;
 
+    }
 
 }
+
+void game::stop()
+{
+    int i;
+    person *p=head;
+
+    for (i=0;i<n;i++)
+    {
+        head=head->next;
+        delete p;
+        p=head;
+    }
+
+}
+
+
+
+
+
+
+
+
+
+
