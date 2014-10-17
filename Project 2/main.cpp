@@ -45,10 +45,15 @@ void game::Initial()
 {
     person *p,*tail;
 
+    cout<<"请输入生死游戏的总人数N：";
     cin>>n;
+    cout<<endl<<"请输入游戏开始的位置S：";
     cin>>s;
+    cout<<endl<<"请输入死亡数字M：";
     cin>>m;
+    cout<<endl<<"请输入剩余的生者人数K：";
     cin>>k;
+    cout<<endl;
 
     head=new person(1);
     tail=head;
@@ -81,7 +86,7 @@ void game::start()
         for (j=0;j<m;j++)
             p=p->next;
         
-        cout<<p->num;
+        cout<<"第"<<i+1<<"个死者的位置是："<<p->num<<endl;
 
     }
 
