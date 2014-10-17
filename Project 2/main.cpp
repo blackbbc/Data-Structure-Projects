@@ -6,103 +6,126 @@ class game;
 
 class person
 {
-    friend game;
-    private:
-        int num;
-        person *next;
-    public:
-        person(int pos):num(pos){}
+	friend game;
+private:
+	int num;
+	person *llink;
+	person *rlink;
+public:
+	person(int pos) :num(pos){}
 };
 
 class game
 {
-    private:
-        int n;
-        int m; 
-        int s;
-        int k;
-        person *head;        
+private:
+	int n;
+	int m;
+	int s;
+	int k;
+	person *head;
 
 
-    public:
-        void Initial();
-        void start();
-        void stop();
+public:
+	void Initial();
+	void start();
+	void stop();
 
 };
 
 
 int main()
 {
-    game liveOrDie;    
-    liveOrDie.Initial();
-    liveOrDie.start();
-    liveOrDie.stop();
+	game liveOrDie;
+	liveOrDie.Initial();
+	liveOrDie.start();
+	liveOrDie.stop();
 
 }
 
 void game::Initial()
 {
-    person *p,*tail;
+	person *p, *tail;
 
-    cout<<"è¯·è¾“å…¥ç”Ÿæ­»æ¸¸æˆçš„æ€»äººæ•°Nï¼š";
-    cin>>n;
-    cout<<endl<<"è¯·è¾“å…¥æ¸¸æˆå¼€å§‹çš„ä½ç½®Sï¼š";
-    cin>>s;
-    cout<<endl<<"è¯·è¾“å…¥æ­»äº¡æ•°å­—Mï¼š";
-    cin>>m;
-    cout<<endl<<"è¯·è¾“å…¥å‰©ä½™çš„ç”Ÿè€…äººæ•°Kï¼š";
-    cin>>k;
-    cout<<endl;
+	cout << "ÇëÊäÈëÉúËÀÓÎÏ·µÄ×ÜÈËÊýN£º";
+	cin >> n;
+	cout << "ÇëÊäÈëÓÎÏ·¿ªÊ¼µÄÎ»ÖÃS£º";
+	cin >> s;
+	cout << "ÇëÊäÈëËÀÍöÊý×ÖM£º";
+	cin >> m;
+	cout << "ÇëÊäÈëÊ£ÓàµÄÉúÕßÈËÊýK£º";
+	cin >> k;
+	cout << endl;
 
-    head=new person(1);
-    tail=head;
+	head = new person(1);
+	tail = head;
 
-    for (int i=2;i<=n;i++)
-    {
-        p=new person(i);
-        tail->next=p;
-        tail=p;
-    }
+	for (int i = 2; i <= n; i++)
+	{
+		p = new person(i);
+		tail->rlink = p;
+		p->llink = tail;
+		p->rlink = NULL;
+		tail = p;
+	}
 
-    tail->next=head;
+	tail->rlink = head;
+	head->llink = tail;
 
 }
 
 void game::start()
 {
-  
-    int i,j;
-    person *p=head;
-    s--;
-    if (s==0)
-        s=n;
-    
-   while (p->num!=s)
-       p=p->next;
 
-    for (i=0;i<n-k;i++)
-    {
-        for (j=0;j<m;j++)
-            p=p->next;
-        
-        cout<<"ç¬¬"<<i+1<<"ä¸ªæ­»è€…çš„ä½ç½®æ˜¯ï¼š"<<p->num<<endl;
+	int i, j;
+	person *p = head,*temp;
+	s--;
+	if (s == 0)
+		s = n;
 
-    }
+	while (p->num != s)
+		p = p->rlink;
+
+	for (i = 0; i<n-k; i++)
+	{
+		for (j = 0; j<m; j++)
+			p = p->rlink;
+
+		cout << "µÚ"<<i+1<<"¸öËÀÕßµÄÎ»ÖÃÊÇ£º"<<p->num<<endl;
+
+		if (head->num == p->num)
+			head = head->rlink;
+
+		p->llink->rlink = p->rlink;
+		p->rlink->llink = p->llink;
+		temp = p;
+		p = p->llink;
+		delete temp;
+
+	}
+
+	cout << endl << "×îºóÊ£ÏÂ£º" << k << "ÈË" << endl;
+	cout << "Ê£ÓàµÄÉúÕßÎ»ÖÃÎª£º";
+	p = head;
+	for (i = 0; i <  k; i++)
+	{
+		cout << p->num << " ";
+		p = p->rlink;
+	}
+	cout << endl;
 
 }
 
 void game::stop()
 {
-    int i;
-    person *p=head;
+	int i;
+	person *p = head;
 
-    for (i=0;i<n;i++)
-    {
-        head=head->next;
-        delete p;
-        p=head;
-    }
+	for (i = 0; i<k; i++)
+	{
+		head = head->rlink;
+		delete p;
+		p = head;
+	}
 
 }
 
