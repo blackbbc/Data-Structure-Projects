@@ -33,10 +33,14 @@ int main()
 
 void getmap()
 {
+    char temp;
     cin>>n>>m;
     for (int i=0;i<n;i++)
         for (int j=0;j<n;j++)
+        {
+            cin>>temp;
             cin>>map[i][j];
+        }
 
 }
 
