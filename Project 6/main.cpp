@@ -3,6 +3,8 @@
 
 using namespace std;
 
+const string title="**          家谱管理系统          **\n====================================\n**      请选择要执行的操作：      **\n**        1 --- 查找子孙          **\n**        2 --- 查找祖先          **\n**        3 --- 插入              **\n**        4 --- 删除              **\n**        5 --- 修改              **\n**        0 --- 退出              **\n====================================\n";
+
 struct point
 {
 	string name;
@@ -129,6 +131,9 @@ void family::run()
 void family::build()
 {
 	string s;
+	
+	cout<<title;
+	
 	cout<<"首先请建立祖先！"<<endl;
 	cout<<"请输入祖先的姓名：";
 	cin>>s;
