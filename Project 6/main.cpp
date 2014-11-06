@@ -1,19 +1,24 @@
 #include <iostream>
 #include <string>
+#include <cstdlib>
 
 using namespace std;
 
+//题头 
 const string title="**          家谱管理系统          **\n====================================\n**      请选择要执行的操作：      **\n**        1 --- 查找子孙          **\n**        2 --- 查找祖先          **\n**        3 --- 插入              **\n**        4 --- 删除              **\n**        5 --- 修改              **\n**        0 --- 退出              **\n====================================\n";
 
+
+//结点类型 
 struct point
 {
-	string name;
-	point *next;
-	point *child;
-	point *pre;
-	point *fa;
+	string name;		//名称 
+	point *next;		//右兄弟 
+	point *child;	 	//儿子 
+	point *pre;			//左兄弟 
+	point *fa;			//父亲 
 };
 
+//整棵树 
 class family
 {
 	private:
@@ -23,12 +28,12 @@ class family
 		~family();
 		void run();
 		void build();
-		point *fin(point *,string );
-		void ins(string );
-		void del(point *);
-		void dell(point *);
-		void mod(string );
-		void show(point *);
+		point *fin(point *,string );		//查找结点 
+		void ins(string );					//插入 
+		void del(point *);					//删除自己和兄弟 
+		void dell(point *);					//删除自己 
+		void mod(string );					//修改 
+		void show(point *);					//展示儿子 
 };
 
 
@@ -36,6 +41,8 @@ int main()
 {
 	family fam;
 	fam.run();
+	
+	system("pause");
 }
 
 family::~family()

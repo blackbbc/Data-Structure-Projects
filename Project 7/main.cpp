@@ -2,15 +2,18 @@
 #include <stack>
 #include <cctype>
 #include <cstring>
+#include <cstdlib>
 
 using namespace std;
 
 char a[100],*b;
-char pri[255];
-stack<char> exp;
+char pri[255];	   //定义符号优先级 
+stack<char> expe;  //存储符号栈 
 
+
+//预处理符号优先级 
 void initial()
-{
+{ 
     pri['\0']=0;
     pri['#']=0;
     pri['^']=7;
@@ -23,6 +26,8 @@ void initial()
     pri[')']=1;
 }
 
+
+//中缀转后缀 
 char *houzhui(char *ss,int n)
 {
     int i,j,m=0;
@@ -31,14 +36,19 @@ char *houzhui(char *ss,int n)
     n++;
     char *a=new char[n];
     strcpy(a,ss);
+    
+    //用#作为表达式结束标志 
     a[n-1]='#';
 
     char *temp=new char[n];
 
-    exp.push('\0');
+    expe.push('\0');
 
+
+	//处理表达式 
     for (i=0;i<n;i++)
     {
+    	//如果是数字直接输出 
         if (isdigit(a[i]))
         {
             temp[m]=a[i];
@@ -47,28 +57,32 @@ char *houzhui(char *ss,int n)
         else
         {
 
+			//如果是(，直接入展 
             if (a[i]=='(')
-                exp.push('(');
+                expe.push('(');
             else
+            	//如果是)，出栈直到弹出第一个( 
                 if (a[i]==')')
                 {
-                    while (exp.top()!='(')
+                    while (expe.top()!='(')
                     {
-                        temp[m]=exp.top();
+                        temp[m]=expe.top();
                         m++;
-                        exp.pop();
+                        expe.pop();
                     }
-                    exp.pop();
+                    expe.pop();
                 }
+                //如果是其他运算符，根据运算符优先级确定是否进栈 
                 else
                 {
-                    while ((!exp.empty())&&(pri[exp.top()]>=pri[a[i]]))
+                	//如果非空且栈顶元素优先级大于当前符号，出栈 
+                    while ((!expe.empty())&&(pri[expe.top()]>=pri[a[i]]))
                     {
-                        temp[m]=exp.top();
+                        temp[m]=expe.top();
                         m++;
-                        exp.pop();
+                        expe.pop();
                     }
-                    exp.push(a[i]);
+                    expe.push(a[i]);
                 }
         }
     }
@@ -78,6 +92,7 @@ char *houzhui(char *ss,int n)
 
 }
 
+//中缀转前缀 
 char *qianzhui(char *ss,int n)
 {
     int i,j,m=0;
@@ -104,27 +119,27 @@ char *qianzhui(char *ss,int n)
         {
 
             if (a[i]==')')
-                exp.push(')');
+                expe.push(')');
             else
                 if (a[i]=='(')
                 {
-                    while (exp.top()!=')')
+                    while (expe.top()!=')')
                     {
-                        temp[m]=exp.top();
+                        temp[m]=expe.top();
                         m++;
-                        exp.pop();
+                        expe.pop();
                     }
-                    exp.pop();
+                    expe.pop();
                 }
                 else
                 {
-                    while ((!exp.empty())&&(pri[exp.top()]>pri[a[i]]))
+                    while ((!expe.empty())&&(pri[expe.top()]>pri[a[i]]))
                     {
-                        temp[m]=exp.top();
+                        temp[m]=expe.top();
                         m++;
-                        exp.pop();
+                        expe.pop();
                     }
-                    exp.push(a[i]);
+                    expe.push(a[i]);
                 }
         }
     }
@@ -143,6 +158,8 @@ char *qianzhui(char *ss,int n)
 
 }
 
+
+//使用后缀表达式求值 
 float countexp(char *ex)
 {
 	int i,j;
@@ -228,6 +245,8 @@ int main()
     
     cout<<"表达式的值：";
     cout<<countexp(b)<<endl<<endl;
+    
+    system("pause");
     
 
     return 0;
