@@ -4,18 +4,21 @@
 
 using namespace std;
 
+//树结构 
 struct pointer
 {
-	int key,height;
+	int key,height;//height记录高度用来判断是否需要旋转 
 	pointer *left,*right;
 };
 
 int i,data,n,opt;
-pointer *root=NULL,*p;
+pointer *root=NULL;//平衡树入口 
 
+//标题 
 char title[255]="**          平衡二叉树          **\n==================================\n**     1 --- 插入元素           **\n**     2 --- 查询元素           **\n**     3 --- 中缀遍历           **\n**     4 --- 退出程序           **\n==================================\n";
 
- 
+
+//返回该节点的高度 
 int h(pointer *x)
 {
 	if (x==NULL)
@@ -24,11 +27,13 @@ int h(pointer *x)
 		return x->height;
 }
 
+//返回最大值 
 int max(int x,int y)
 {
 	return x>y?x:y;
 }
 
+//单左旋 
 pointer *SingleRotateWithLeft(pointer *x)
 {
 	pointer *y;
@@ -40,6 +45,7 @@ pointer *SingleRotateWithLeft(pointer *x)
 	return y;
 }
 
+//单右旋 
 pointer *SingleRotateWithRight(pointer *x)
 {
 	pointer *y;
@@ -51,20 +57,24 @@ pointer *SingleRotateWithRight(pointer *x)
 	return y;
 }
 
+//双左旋 
 pointer *DoubleRotateWithLeft(pointer *x)
 {
 	x->left=SingleRotateWithRight(x->left);
 	return SingleRotateWithLeft(x);
 }
 
+//双右旋 
 pointer *DoubleRotateWithRight(pointer *x)
 {
 	x->right=SingleRotateWithLeft(x->right);
 	return SingleRotateWithRight(x);
 }
 
+//插入节点 
 pointer *Insert(int X,pointer *T)
 {
+	//空树 
 	if (T==NULL)
 	{
 		T=new pointer();
@@ -74,6 +84,7 @@ pointer *Insert(int X,pointer *T)
 		T->height=0;
 	}
 	else
+		//比节点小插左边 
 		if (X<T->key)
 		{
 			T->left=Insert(X,T->left);
@@ -83,6 +94,7 @@ pointer *Insert(int X,pointer *T)
 				else
 					T=DoubleRotateWithLeft(T);
 		}
+		////比节点大插右边 
 		else
 		{
 			T->right=Insert(X,T->right);
@@ -96,6 +108,7 @@ pointer *Insert(int X,pointer *T)
 	return T;
 }
 
+//中序遍历 
 void print(pointer *root)
 {
 	if (root==NULL)
@@ -112,6 +125,7 @@ void Pprint(pointer *root)
 	cout<<"\n\n";
 }
 
+//寻找节点 
 bool search(int x,pointer *T)
 {
 	if (T==NULL)
@@ -186,6 +200,7 @@ int main()
 				break;
 			case 4:
 				cout<<"感谢您的使用，再见！\n";
+				system("pause");
 				return 0;
 				break;
 			default:
@@ -193,6 +208,7 @@ int main()
 				break; 
 		}
 	}
+	
 	
 	return 0;
 }
