@@ -1,4 +1,5 @@
 #include <iostream>
+#include <stack>
 #include <cstdlib>
 #include <time.h>
 
@@ -91,6 +92,73 @@ pointer *Insert(int X,pointer *T)
 		}
 	T->height=max(h(T->left),h(T->right));
 	return T;
+}
+
+//平衡树删除 
+//非递归写法？ 
+bool Delete(int X,pointer *T)
+{
+	pointer *p=T,*pr=NULL,*ppr,*q,*ptr;
+	stack<pointer *>st;
+	
+	//寻找删除位置，并用栈记录（父亲）路径 
+	while (p!=NULL)
+	{
+		if (X==p->key)
+			break;
+		pr=p;
+		st.push(pr);
+		if (X<p->key)
+			p=p->left;
+		else
+			p=p->right;
+	}
+	
+	if (p==NULL)
+		return false;
+	
+	//有两个子女，在左子树找直接前驱 
+	if (p->left!=NULL && p->right!=NULL)
+	{
+		pr=p;
+		st.push(pr);
+		q=p->left;
+		
+		while (q->right!=NULL)
+		{
+			pr=q;
+			st.push(pr);
+			q=q->right;
+		}
+		
+		p->key=q->key;//用直接前驱填补
+		p=q;//移到直接前驱 
+	}
+	
+	//一个子女的情况，移动到其中一个子女身上 
+	if (p->left!=NULL)
+		q=p->left;
+	else
+		q=p->right;
+	
+	//被删节点是根节点
+	if (pr==NULL)
+		ptr=q;
+	else
+	{
+		//在干什么？？？？ 
+		if (pr->left==p)
+			pr->left=q;
+		else
+			pr->right=q;
+		
+		//回溯 
+		while (!st.empty())
+		{
+			st.pop();
+			
+		}
+	} 
 }
 
 void print(pointer *root)
