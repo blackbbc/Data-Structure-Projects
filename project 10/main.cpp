@@ -4,8 +4,10 @@
 
 using namespace std;
 
-int a[100];
-int b[100];
+int a[100000];
+int b[100000];
+int c[100000];
+int temp[100000];
 int i,j,n;
 
 //冒泡排序 
@@ -59,11 +61,19 @@ void insertSort(int a[],int n)
 }
 
 //希尔排序
- void shellSort(int a[],int n)
- {
- 	int i,j,t;
- 	
- }
+void shellSort(int a[],int n)
+{
+	int i,j,t,gap;
+	for (gap=n/2;gap>0;gap/=2)
+		for (i=gap;i<n;i++)
+		{
+			t=a[i];
+			j=0;
+			for (j=i-gap;j>=0&&a[j]>t;j-=gap)
+				a[j+gap]=a[j];
+			a[j+gap]=t;
+		}
+}
 
  
 //快速排序 
@@ -92,7 +102,6 @@ void quickSort(int a[],int left,int right)
 	while (i<=j);
 	quickSort(a,left,j);
 	quickSort(a,i,right);
-	
 }
 
 void siftDown(int now)
@@ -163,10 +172,41 @@ void heapSort(int a[],int n)
 	}
 } 
 
-//归并排序
-void mergeSort(int a[],int n)
+void mergeArray(int a[],int left,int mid,int right)
 {
+	int i=left;
+	int j=mid+1;
+	int m=mid;
+	int n=right;
+	int k=0;
+	
+	while ( i<=m && j<=n)
+	{
+		if (a[i]<a[j])
+			temp[k++]=a[i++];
+		else
+			temp[k++]=a[j++];
+	}
+	while (i<=m)
+		temp[k++]=a[i++];
+	while (j<n)
+		temp[k++]=a[j++];
 		
+	for (i=0;i<k;i++)
+		a[left+i]=temp[i];
+}
+
+
+//归并排序
+void mergeSort(int a[],int left,int right)
+{
+	if (left<right)
+	{
+		int mid=(left+right)>>1;
+		mergeSort(a,left,mid);
+		mergeSort(a,mid+1,right);
+		mergeArray(a,left,mid,right);
+	}
 }
 
 //求数据最大位 
@@ -190,28 +230,128 @@ int maxbit(int a[],int n)
 void bucketSort(int a[],int n)
 {
 	int d=maxbit(a,n);
+	int count[10];
+	int i,j,t;
+	int radix=1;
+	
+	//进行D次排序 
+	for (i=0;i<d;i++)
+	{
+		for (j=0;j<10;j++)
+			count[j]=0;//对桶进行清零 
+		for (j=0;j<n;j++)
+		{
+			t=(a[j]/radix)%10;//求出第I位上的数字
+			count[t]++; 
+		}
+		for (j=1;j<10;j++)
+			count[j]+=count[j-1];//求出起点位置 
+		
+		for (j=n-1;j>=0;j--)//收集桶 
+		{
+			t=(a[j]/radix)%10;//求出第I位上的数字 
+			temp[count[t]-1]=a[j];
+			count[t]--;
+		}
+		
+		for (j=0;j<n;j++)
+			a[j]=temp[j];
+		
+		radix*=10;	
+	}
 }
-  
+
+void initial(int n)
+{
+	for (int i=0;i<n;i++)
+	{
+		a[i]=c[i];
+		b[i]=a[i];
+		temp[i]=0;
+	}
+}  
 
 int main()
 {
+	clock_t start,finish;
+	double totaltime;
+	
 	srand(time(0));	
 	
 	cin>>n;
-	for (i=0;i<n;i++)
-	{
-		a[i]=rand()%101;
-		b[i]=a[i];	
-	}
 	
-//	bubbleSort(a,n);
-//	selectSort(a,n);
-//	insertSort(a,n);
-//	quickSort(a,0,n-1);
-//	heapSort(a,n);
 	
 	for (i=0;i<n;i++)
-		cout<<a[i]<<" ";
+		c[i]=rand()%100000;
+	
+	//冒泡排序 
+	initial(n);
+	start=clock();
+	bubbleSort(a,n);
+	finish=clock();
+	totaltime=(double)(finish-start)/CLOCKS_PER_SEC;
+	cout<<totaltime<<endl;
+
+	//选择排序 
+	initial(n);
+	start=clock();
+	selectSort(a,n);
+	finish=clock();
+	totaltime=(double)(finish-start)/CLOCKS_PER_SEC;
+	cout<<totaltime<<endl;
+	
+	//插入排序 
+	initial(n);
+	start=clock();
+	insertSort(a,n);
+	finish=clock();
+	totaltime=(double)(finish-start)/CLOCKS_PER_SEC;
+	cout<<totaltime<<endl;
+	
+	//希尔排序 
+	initial(n);
+	start=clock();
+	shellSort(a,n);
+	finish=clock();
+	totaltime=(double)(finish-start)/CLOCKS_PER_SEC;
+	cout<<totaltime<<endl;
+	
+	//归并排序 
+	initial(n);
+	start=clock();
+	mergeSort(a,0,n-1);
+	finish=clock();
+	totaltime=(double)(finish-start)/CLOCKS_PER_SEC;
+	cout<<totaltime<<endl;
+	
+	//快速排序 
+	initial(n);
+	start=clock();
+	quickSort(a,0,n-1);
+	finish=clock();
+	totaltime=(double)(finish-start)/CLOCKS_PER_SEC;
+	cout<<totaltime<<endl;
+	
+	//堆排序 
+	initial(n);
+	start=clock();
+	heapSort(a,n);
+	finish=clock();
+	totaltime=(double)(finish-start)/CLOCKS_PER_SEC;
+	cout<<totaltime<<endl;
+	
+	//基数排序 
+	initial(n);
+	start=clock();
+	bucketSort(a,n);
+	finish=clock();
+	totaltime=(double)(finish-start)/CLOCKS_PER_SEC;
+	cout<<totaltime<<endl;
+
+	
+	
+//	for (i=0;i<n;i++)
+//		cout<<a[i]<<" ";
 	
 	return 0;
 }
