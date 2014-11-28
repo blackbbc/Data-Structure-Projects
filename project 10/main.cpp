@@ -8,6 +8,7 @@ int a[100000];
 int b[100000];
 int c[100000];
 int temp[100000];
+long long count=0;
 int i,j,n;
 
 //冒泡排序 
@@ -16,12 +17,16 @@ void bubbleSort(int a[],int n)
 	int i,j,t;
 	for (i=0;i<n-1;i++)
 		for (j=i+1;j<n;j++)
+		{
+			count++;
 			if (a[j]<a[i])
 			{
 				t=a[i];
 				a[i]=a[j];
 				a[j]=t;
 			}
+		}
+
 }
 
 //选择排序
@@ -32,8 +37,12 @@ void selectSort(int a[],int n)
 	{
 		min=i;
 		for (j=i+1;j<n;j++)
+		{
+			count++;
 			if (a[j]<a[min])
 				min=j;
+		}
+
 		if (min!=i)
 		{
 			t=a[min];
@@ -53,6 +62,7 @@ void insertSort(int a[],int n)
 		j=i;
 		while (j>0&&a[j-1]>t)
 		{
+			count++;
 			a[j]=a[j-1];
 			j--;
 		}
@@ -70,7 +80,10 @@ void shellSort(int a[],int n)
 			t=a[i];
 			j=0;
 			for (j=i-gap;j>=0&&a[j]>t;j-=gap)
+			{
 				a[j+gap]=a[j];
+				count++;
+			}
 			a[j+gap]=t;
 		}
 }
@@ -87,8 +100,16 @@ void quickSort(int a[],int left,int right)
 	mid=(i+j)>>1;
 	do
 	{
-		while (a[i]<a[mid]) i++;
-		while (a[j]>a[mid]) j--;
+		while (a[i]<a[mid]) 
+		{
+			count++;
+			i++;
+		}
+		while (a[j]>a[mid]) 
+		{
+			count++;
+			j--;
+		}
 		
 		if (i<=j)
 		{
@@ -110,6 +131,7 @@ void siftDown(int now)
     x=a[now];
     do
     {
+    	count++;
         if (2*now>n)
             break;
         else
@@ -134,6 +156,7 @@ void siftUp(int now)
 	x=a[now];
 	do
 	{
+		count++;
 		i=now/2;
 		if (x<a[i])
 		{
@@ -182,6 +205,7 @@ void mergeArray(int a[],int left,int mid,int right)
 	
 	while ( i<=m && j<=n)
 	{
+		count++;
 		if (a[i]<a[j])
 			temp[k++]=a[i++];
 		else
@@ -263,6 +287,7 @@ void bucketSort(int a[],int n)
 
 void initial(int n)
 {
+	count=0;
 	for (int i=0;i<n;i++)
 	{
 		a[i]=c[i];
@@ -278,27 +303,33 @@ int main()
 	
 	srand(time(0));	
 	
+	cout<<"请输入要产生的随机数的个数：";
 	cin>>n;
 	
-	
 	for (i=0;i<n;i++)
-		c[i]=rand()%100000;
+		c[i]=rand()%10000000;
 	
-	//冒泡排序 
+	cout<<endl;
+	
+	//萌萌哒冒泡排序 
 	initial(n);
 	start=clock();
 	bubbleSort(a,n);
 	finish=clock();
 	totaltime=(double)(finish-start)/CLOCKS_PER_SEC;
-	cout<<totaltime<<endl;
+	cout<<"冒泡排序所用时间："<<totaltime<<endl;
+	cout<<"冒泡排序比较次数："<<count<<endl;
+	cout<<endl;
 
-	//选择排序 
+	//萌萌哒选择排序 
 	initial(n);
 	start=clock();
 	selectSort(a,n);
 	finish=clock();
 	totaltime=(double)(finish-start)/CLOCKS_PER_SEC;
-	cout<<totaltime<<endl;
+	cout<<"选择排序所用时间："<<totaltime<<endl;
+	cout<<"选择排序比较次数："<<count<<endl;
+	cout<<endl;
 	
 	//插入排序 
 	initial(n);
@@ -306,7 +337,9 @@ int main()
 	insertSort(a,n);
 	finish=clock();
 	totaltime=(double)(finish-start)/CLOCKS_PER_SEC;
-	cout<<totaltime<<endl;
+	cout<<"插入排序所用时间："<<totaltime<<endl;
+	cout<<"插入排序比较次数："<<count<<endl;
+	cout<<endl;
 	
 	//希尔排序 
 	initial(n);
@@ -314,7 +347,9 @@ int main()
 	shellSort(a,n);
 	finish=clock();
 	totaltime=(double)(finish-start)/CLOCKS_PER_SEC;
-	cout<<totaltime<<endl;
+	cout<<"希尔排序所用时间："<<totaltime<<endl;
+	cout<<"希尔排序比较次数："<<count<<endl;
+	cout<<endl;
 	
 	//归并排序 
 	initial(n);
@@ -322,7 +357,9 @@ int main()
 	mergeSort(a,0,n-1);
 	finish=clock();
 	totaltime=(double)(finish-start)/CLOCKS_PER_SEC;
-	cout<<totaltime<<endl;
+	cout<<"归并排序所用时间："<<totaltime<<endl;
+	cout<<"归并排序比较次数："<<count<<endl;
+	cout<<endl;
 	
 	//快速排序 
 	initial(n);
@@ -330,7 +367,9 @@ int main()
 	quickSort(a,0,n-1);
 	finish=clock();
 	totaltime=(double)(finish-start)/CLOCKS_PER_SEC;
-	cout<<totaltime<<endl;
+	cout<<"快速排序所用时间："<<totaltime<<endl;
+	cout<<"快速排序比较次数："<<count<<endl;
+	cout<<endl;
 	
 	//堆排序 
 	initial(n);
@@ -338,7 +377,9 @@ int main()
 	heapSort(a,n);
 	finish=clock();
 	totaltime=(double)(finish-start)/CLOCKS_PER_SEC;
-	cout<<totaltime<<endl;
+	cout<<"堆排序所用时间："<<totaltime<<endl;
+	cout<<"堆排序比较次数："<<count<<endl;
+	cout<<endl;
 	
 	//基数排序 
 	initial(n);
@@ -346,12 +387,11 @@ int main()
 	bucketSort(a,n);
 	finish=clock();
 	totaltime=(double)(finish-start)/CLOCKS_PER_SEC;
-	cout<<totaltime<<endl;
-
+	cout<<"基数排序所用时间："<<totaltime<<endl;
+	cout<<"基数排序比较次数："<<count<<endl;
+	cout<<endl;
 	
-	
-//	for (i=0;i<n;i++)
-//		cout<<a[i]<<" ";
+	system("pause");
 	
 	return 0;
 }
