@@ -8,7 +8,7 @@ int a[100000];
 int b[100000];
 int c[100000];
 int temp[100000];
-long long count=0;
+long countt=0;
 int i,j,n;
 
 //冒泡排序 
@@ -18,7 +18,7 @@ void bubbleSort(int a[],int n)
 	for (i=0;i<n-1;i++)
 		for (j=i+1;j<n;j++)
 		{
-			count++;
+			countt++;
 			if (a[j]<a[i])
 			{
 				t=a[i];
@@ -38,7 +38,7 @@ void selectSort(int a[],int n)
 		min=i;
 		for (j=i+1;j<n;j++)
 		{
-			count++;
+			countt++;
 			if (a[j]<a[min])
 				min=j;
 		}
@@ -62,7 +62,7 @@ void insertSort(int a[],int n)
 		j=i;
 		while (j>0&&a[j-1]>t)
 		{
-			count++;
+			countt++;
 			a[j]=a[j-1];
 			j--;
 		}
@@ -82,7 +82,7 @@ void shellSort(int a[],int n)
 			for (j=i-gap;j>=0&&a[j]>t;j-=gap)
 			{
 				a[j+gap]=a[j];
-				count++;
+				countt++;
 			}
 			a[j+gap]=t;
 		}
@@ -102,12 +102,12 @@ void quickSort(int a[],int left,int right)
 	{
 		while (a[i]<a[mid]) 
 		{
-			count++;
+			countt++;
 			i++;
 		}
 		while (a[j]>a[mid]) 
 		{
-			count++;
+			countt++;
 			j--;
 		}
 		
@@ -131,7 +131,7 @@ void siftDown(int now)
     x=a[now];
     do
     {
-    	count++;
+    	countt++;
         if (2*now>n)
             break;
         else
@@ -156,7 +156,7 @@ void siftUp(int now)
 	x=a[now];
 	do
 	{
-		count++;
+		countt++;
 		i=now/2;
 		if (x<a[i])
 		{
@@ -205,7 +205,7 @@ void mergeArray(int a[],int left,int mid,int right)
 	
 	while ( i<=m && j<=n)
 	{
-		count++;
+		countt++;
 		if (a[i]<a[j])
 			temp[k++]=a[i++];
 		else
@@ -254,7 +254,7 @@ int maxbit(int a[],int n)
 void bucketSort(int a[],int n)
 {
 	int d=maxbit(a,n);
-	int count[10];
+	int countt[10];
 	int i,j,t;
 	int radix=1;
 	
@@ -262,20 +262,20 @@ void bucketSort(int a[],int n)
 	for (i=0;i<d;i++)
 	{
 		for (j=0;j<10;j++)
-			count[j]=0;//对桶进行清零 
+			countt[j]=0;//对桶进行清零 
 		for (j=0;j<n;j++)
 		{
 			t=(a[j]/radix)%10;//求出第I位上的数字
-			count[t]++; 
+			countt[t]++; 
 		}
 		for (j=1;j<10;j++)
-			count[j]+=count[j-1];//求出起点位置 
+			countt[j]+=countt[j-1];//求出起点位置 
 		
 		for (j=n-1;j>=0;j--)//收集桶 
 		{
 			t=(a[j]/radix)%10;//求出第I位上的数字 
-			temp[count[t]-1]=a[j];
-			count[t]--;
+			temp[countt[t]-1]=a[j];
+			countt[t]--;
 		}
 		
 		for (j=0;j<n;j++)
@@ -287,7 +287,7 @@ void bucketSort(int a[],int n)
 
 void initial(int n)
 {
-	count=0;
+	countt=0;
 	for (int i=0;i<n;i++)
 	{
 		a[i]=c[i];
@@ -318,7 +318,7 @@ int main()
 	finish=clock();
 	totaltime=(double)(finish-start)/CLOCKS_PER_SEC;
 	cout<<"冒泡排序所用时间："<<totaltime<<endl;
-	cout<<"冒泡排序比较次数："<<count<<endl;
+	cout<<"冒泡排序比较次数："<<countt<<endl;
 	cout<<endl;
 
 	//萌萌哒选择排序 
@@ -328,7 +328,7 @@ int main()
 	finish=clock();
 	totaltime=(double)(finish-start)/CLOCKS_PER_SEC;
 	cout<<"选择排序所用时间："<<totaltime<<endl;
-	cout<<"选择排序比较次数："<<count<<endl;
+	cout<<"选择排序比较次数："<<countt<<endl;
 	cout<<endl;
 	
 	//插入排序 
@@ -338,7 +338,7 @@ int main()
 	finish=clock();
 	totaltime=(double)(finish-start)/CLOCKS_PER_SEC;
 	cout<<"插入排序所用时间："<<totaltime<<endl;
-	cout<<"插入排序比较次数："<<count<<endl;
+	cout<<"插入排序比较次数："<<countt<<endl;
 	cout<<endl;
 	
 	//希尔排序 
@@ -348,7 +348,7 @@ int main()
 	finish=clock();
 	totaltime=(double)(finish-start)/CLOCKS_PER_SEC;
 	cout<<"希尔排序所用时间："<<totaltime<<endl;
-	cout<<"希尔排序比较次数："<<count<<endl;
+	cout<<"希尔排序比较次数："<<countt<<endl;
 	cout<<endl;
 	
 	//归并排序 
@@ -358,7 +358,7 @@ int main()
 	finish=clock();
 	totaltime=(double)(finish-start)/CLOCKS_PER_SEC;
 	cout<<"归并排序所用时间："<<totaltime<<endl;
-	cout<<"归并排序比较次数："<<count<<endl;
+	cout<<"归并排序比较次数："<<countt<<endl;
 	cout<<endl;
 	
 	//快速排序 
@@ -368,7 +368,7 @@ int main()
 	finish=clock();
 	totaltime=(double)(finish-start)/CLOCKS_PER_SEC;
 	cout<<"快速排序所用时间："<<totaltime<<endl;
-	cout<<"快速排序比较次数："<<count<<endl;
+	cout<<"快速排序比较次数："<<countt<<endl;
 	cout<<endl;
 	
 	//堆排序 
@@ -378,7 +378,7 @@ int main()
 	finish=clock();
 	totaltime=(double)(finish-start)/CLOCKS_PER_SEC;
 	cout<<"堆排序所用时间："<<totaltime<<endl;
-	cout<<"堆排序比较次数："<<count<<endl;
+	cout<<"堆排序比较次数："<<countt<<endl;
 	cout<<endl;
 	
 	//基数排序 
@@ -388,7 +388,7 @@ int main()
 	finish=clock();
 	totaltime=(double)(finish-start)/CLOCKS_PER_SEC;
 	cout<<"基数排序所用时间："<<totaltime<<endl;
-	cout<<"基数排序比较次数："<<count<<endl;
+	cout<<"基数排序比较次数："<<countt<<endl;
 	cout<<endl;
 	
 	system("pause");
